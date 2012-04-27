@@ -6,10 +6,10 @@ import java.util.Scanner;
 
 public class Graph {
 
-	public class Neighbor {
+	public class Friend {
 		public int vnum;
-		public Neighbor next;
-		public Neighbor(int vnum, Neighbor nbr) {
+		public Friend next;
+		public Friend(int vnum, Friend nbr) {
 			this.vnum = vnum;
 			next = nbr;
 		}
@@ -18,11 +18,11 @@ public class Graph {
 	class Vertex {
 		String name;
 		String school;
-		Neighbor neighbors;
-		Vertex(String name, String school, Neighbor neighbors) {
+		Friend friends;
+		Vertex(String name, String school, Friend neighbors) {
 			this.name = name;
 			this.school = school;
-			this.neighbors = neighbors;
+			this.friends = neighbors;
 		}
 	}
 
@@ -43,18 +43,18 @@ public class Graph {
 		// read vertices
 		for (int v=0; v < adjLists.length; v++) {
 			String in = sc.nextLine();
-			
-			System.out.println(in);
-			
 			int first_pipe = in.indexOf('|');
 			
 			String name = in.substring(0, first_pipe);
 			Boolean student = false;
 			String school = "";
 			
+			System.out.print(name);
+			
 			if(in.charAt(first_pipe + 1) == 'y') {
 				student = true;
 				school = in.substring(first_pipe + 3);
+				System.out.print(" (" + school + ")");
 			}
 			
 			if(student) {
@@ -62,6 +62,7 @@ public class Graph {
 			} else {
 				adjLists[v] = new Vertex(name, null, null);
 			}
+			System.out.print("\n");
 		}
 		
 		// read edges
@@ -72,8 +73,10 @@ public class Graph {
 			int v1 = indexForName(line.substring(0, first_pipe));
 			int v2 = indexForName(line.substring(first_pipe + 1));
 			
-			adjLists[v1].neighbors = new Neighbor(v2, adjLists[v1].neighbors);
-			adjLists[v2].neighbors = new Neighbor(v1, adjLists[v2].neighbors);
+			adjLists[v1].friends = new Friend(v2, adjLists[v1].friends);
+			adjLists[v2].friends = new Friend(v1, adjLists[v2].friends);
+			
+			System.out.println(nameForIndex(v1) + " -> " + nameForIndex(v2));
 		}
 	}
 	
@@ -94,7 +97,7 @@ public class Graph {
 	private void dfs(int v, boolean[] visited) {
 		visited[v] = true;
 		System.out.println("visiting " + adjLists[v].name);
-		for (Neighbor e=adjLists[v].neighbors; e != null; e=e.next) {
+		for (Friend e=adjLists[v].friends; e != null; e=e.next) {
 			if (!visited[e.vnum]) {
 				System.out.println(adjLists[v].name + "--" + adjLists[e.vnum].name);
 				dfs(e.vnum, visited);
@@ -109,5 +112,16 @@ public class Graph {
 			}
 		}
 		return -1;
+	}
+	
+	String nameForIndex(int index) {
+		if(adjLists[index] != null) {
+			return adjLists[index].name;
+		}
+		return null;
+	}
+	
+	public void studentsAtSchool(String school) {
+		
 	}
 }
