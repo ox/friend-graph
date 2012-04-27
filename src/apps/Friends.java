@@ -4,14 +4,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import structures.Graph;
+
 public class Friends {
 	public static void main(String[] args) throws FileNotFoundException {
 		Scanner stdin = new Scanner(System.in);
 		
-		System.out.println("graph file: ");
-		String line = stdin.next();
+		//System.out.print("graph file: ");
+		//String line = stdin.nextLine();
 
-		Scanner scfile = new Scanner(new File(line));
+		Graph graph = new Graph("ft.txt");
 
 		System.out.print("\tChoose action: ");
 		System.out.print("students at school");
