@@ -35,9 +35,10 @@ public class Graph {
 	 * @throws FileNotFoundException If file is not found
 	 */
 	public Graph(String file) throws FileNotFoundException {
-		Scanner sc = new Scanner(new File(file)).useDelimiter("\\n"); //we'll break the new lines ourselves
-		adjLists = new Vertex[sc.nextInt()];
-		sc.nextLine(); //empty line. damn you java
+		Scanner sc = new Scanner(new File(file));//.useDelimiter("\\n"); //we'll break the new lines ourselves
+		int num = Integer.parseInt(sc.nextLine());
+		adjLists = new Vertex[num];
+		//sc.nextLine(); //empty line. damn you java
 		System.out.println(adjLists.length + " friends");
 		
 		// read vertices
