@@ -15,37 +15,39 @@ public class Friends {
 	throws FileNotFoundException, IOException{
 		System.out.print("Name of graph file: ");
 		String line = stdin.next();
-		Scanner scfile = new Scanner(new File(line));
-		Graph graph = new Graph();
-		graph.build(scfile);
+		Graph graph = new Graph(line);
 		char option;
-		while ((option = getOption()) != '5') {
-			if (option=='1') { //Subgraph
-				System.out.print("\tName of school: ");
-			} else if (option=='2') { // Shortest Path
-				System.out.print("\tName of person who wants the intro: ");
-				String oneName = stdin.next();
-				System.out.print("\tName of person who will be introduced to " + oneName + ": ");
-				String twoName = stdin.next();
-			} else if (option=='3') { // Connected Islands
-				System.out.println("\tName of school for which cliques are to be found: ");
-			} else if (option=='4') { // Connectors
-				
+		while((option = getOption()) != 'q') {
+			switch(option) {
+				case 's':
+					System.out.println("Students at school");
+					System.out.print("\tName of school: ");
+					String school = stdin.nextLine();
+					
+					Graph.studentsAtSchool(school);
+				case 'h':
+					System.out.println("Shortest path");
+					System.out.print("\tName of person who wants the intro: ");
+					String oneName = stdin.next();
+					System.out.print("\tName of person who will be introduced to " + oneName + ": ");
+					String twoName = stdin.next();
+				case 'i':
+					System.out.println("Connected Islands");
+					System.out.println("\tName of school for which cliques are to be found: ");
+				case 'c':
+					System.out.println("Connectors");
 			}
 		}
 	}
 	
 	static char getOption() {
-		System.out.println("\tChoose algorithm ");
-		System.out.println("\t1--Subgraph (Students at School)");
-		System.out.println("\t2--Shortest Path (Intro Chain)");
-		System.out.println("\t3--Connected Islands (Cliques at Schools)");
-		System.out.println("\t4--Connectors");
-		System.out.print("\t5--quit => ");
-		char response = stdin.next().charAt(0);
-		while (response!='1'&&response!='2'&&response!='3'&&response!='4'&&response!='5') {
-			System.out.print("\tEnter 1, 2, 3, 4, or 5 => ");
-			response = stdin.next().charAt(0);
+		System.out.println("Menu:");
+		String[] options = {"[S]tudents at school", "s[H]ortest path", "connected [I]slands", "[C]onnectors", "[Q]uit"};
+		for(int i = 0; i < options.length; i++) System.out.println(options[i]);
+		char response = stdin.next().toLowerCase().charAt(0);
+		while (response!='s'&&response!='h'&&response!='i'&&response!='c'&&response!='q') {
+			System.out.print("\tEnter S, H, I, C, or Q => ");
+			response = stdin.next().toLowerCase().charAt(0);
 		}
 		return response;
 	}
