@@ -30,9 +30,10 @@ public class Friends {
 				case 'h':
 					System.out.println("Shortest path");
 					System.out.print("\tName of person who wants the intro: ");
-					String oneName = stdin.next();
-					System.out.print("\tName of person who will be introduced to " + oneName + ": ");
-					String twoName = stdin.next();
+					String source = stdin.next();
+					System.out.print("\tName of target who will be introduced to " + source + ": ");
+					String target = stdin.next();
+					graph.shortestPath(source, target);
 				case 'i':
 					System.out.println("Connected Islands");
 					System.out.println("\tName of school for which cliques are to be found: ");
@@ -52,6 +53,7 @@ public class Friends {
 		System.out.println("Menu:");
 		String[] options = {"[S]tudents at school", "s[H]ortest path", "connected [I]slands", "[C]onnectors", "[Q]uit"};
 		for(int i = 0; i < options.length; i++) System.out.println(options[i]);
+		System.out.print("=> ");
 		char response = stdin.next().toLowerCase().charAt(0);
 		while (response!='s'&&response!='h'&&response!='i'&&response!='c'&&response!='q') {
 			System.out.print("\tEnter S, H, I, C, or Q => ");
