@@ -17,6 +17,8 @@ public class Friends {
 		//String line = stdin.next();
 		//Graph graph = new Graph(line);
 		Graph graph = new Graph("ft.txt");
+		graph.printFriends();
+
 		char option;
 		while((option = getOption()) != 'q') {
 			switch(option) {
@@ -24,7 +26,7 @@ public class Friends {
 					System.out.println("Students at school");
 					System.out.print("\tName of school: ");
 					String school = stdin.nextLine();
-					//Graph.studentsAtSchool(school);
+					graph.studentsAtSchool(school);
 				case 'h':
 					System.out.println("Shortest path");
 					System.out.print("\tName of person who wants the intro: ");
@@ -34,8 +36,14 @@ public class Friends {
 				case 'i':
 					System.out.println("Connected Islands");
 					System.out.println("\tName of school for which cliques are to be found: ");
+					school = stdin.next();
+					graph.connectedIslands(school);
 				case 'c':
 					System.out.println("Connectors");
+					break;
+				case 'd':
+					graph.dfs();
+					break;
 			}
 		}
 	}
