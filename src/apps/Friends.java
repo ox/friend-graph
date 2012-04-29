@@ -25,8 +25,9 @@ public class Friends {
 				case 's':
 					System.out.println("Students at school");
 					System.out.print("\tName of school: ");
-					String school = stdin.nextLine();
+					String school = stdin.next();
 					graph.studentsAtSchool(school);
+					break;
 				case 'h':
 					System.out.println("Shortest path");
 					System.out.print("\tName of person who wants the intro: ");
@@ -34,11 +35,13 @@ public class Friends {
 					System.out.print("\tName of target who will be introduced to " + source + ": ");
 					String target = stdin.next();
 					graph.shortestPath(source, target);
+					break;
 				case 'i':
 					System.out.println("Connected Islands");
 					System.out.println("\tName of school for which cliques are to be found: ");
 					school = stdin.next();
 					graph.connectedIslands(school);
+					break;					
 				case 'c':
 					System.out.println("Connectors");
 					break;
