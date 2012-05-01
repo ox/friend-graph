@@ -16,10 +16,15 @@ public class Graph {
 		String name;
 		String school;
 		ArrayList<Vertex> friends;
+
+		int dfsnum;
+		int back;
 		Vertex(String name, String school) {
 			this.name = name;
 			this.school = school;
 			this.friends = new ArrayList<Vertex>();
+			int dfsnum = 0;
+			int back = 1;
 		}
 	}
 
@@ -78,28 +83,6 @@ public class Graph {
 		}
 	}
 	
-	public void dfs() {
-		boolean[] visited = new boolean[adjLists.length];
-		for (int v=0; v < visited.length; v++) visited[v] = false;
-		for (int v=0; v < visited.length; v++) {
-			if (!visited[v]) {
-				System.out.println("Starting at " + adjLists[v].name);
-				dfs(v, visited);
-			}
-		}
-	}
-	
-	// recursive dfs
-	private void dfs(int v, boolean[] visited) {
-		visited[v] = true;
-		System.out.println("visiting " + adjLists[v].name);
-		for (int e = 0; e < adjLists.length; e++) {
-			if (!visited[e]) {
-				System.out.println(adjLists[v].name + "--" + adjLists[e].name);
-				dfs(e, visited);
-			}
-		}
-	}
 	
 	public int indexForName(String name) {
 		for (int v=0; v < adjLists.length; v++) {
@@ -264,6 +247,46 @@ public class Graph {
 	 * Connectors
 	 */
 	public void connectors() {
-		
+		dfs();
 	}
+	
+	public void dfs() {
+		boolean[] visited = new boolean[adjLists.length];
+		for (int v=0; v < visited.length; v++) visited[v] = false;
+		for (int v=0; v < visited.length; v++) {
+			if (!visited[v]) {
+				//System.out.println("Starting at " + adjLists[v].name);
+				dfs(v, visited);
+			}
+		}
+		while(!connectors.isEmpty()) {
+			System.out.println(connectors.remove(0)+",");
+		}
+	}
+	
+	// recursive dfs
+	ArrayList<String> connectors = new ArrayList<String>();
+	
+	private void dfs(int v, boolean[] visited) {
+		if (!visited[v]) {
+			adjLists[v].dfsnum++;
+		}
+		visited[v] = true;
+		//System.out.println("visiting " + adjLists[v].name);
+		for (int e = 0; e < adjLists.length; e++) {
+			if (!visited[e]) {
+				//System.out.println(adjLists[v].name + "--" + adjLists[e].name);
+				dfs(e, visited);
+				if (adjLists[v].dfsnum > adjLists[e].back) {
+					adjLists[v].back = Math.min(adjLists[v].back,adjLists[e].back);
+				} else {
+					if (v!=0) connectors.add(adjLists[v].name);
+				}
+			} else {
+				adjLists[v].back = Math.min(adjLists[v].back,adjLists[e].dfsnum);
+			}
+		}
+	}
+	
+	
 }

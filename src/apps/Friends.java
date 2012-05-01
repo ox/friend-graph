@@ -14,9 +14,9 @@ public class Friends {
 	public static void main(String[] args) 
 	throws FileNotFoundException, IOException{
 		System.out.print("Name of graph file: ");
-		//String line = stdin.next();
-		//Graph graph = new Graph(line);
-		Graph graph = new Graph("ft.txt");
+		String line = stdin.next();
+		Graph graph = new Graph(line);
+		//Graph graph = new Graph("ft.txt");
 		graph.printFriends();
 
 		char option;
@@ -44,6 +44,7 @@ public class Friends {
 					break;					
 				case 'c':
 					System.out.println("Connectors");
+					graph.connectors();
 					break;
 				case 'd':
 					graph.dfs();
