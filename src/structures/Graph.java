@@ -114,7 +114,7 @@ public class Graph {
 			if (adjLists[v].dfsnum > adjLists[indexForName(e.name)].back) {
 				adjLists[v].back = Math.min(adjLists[v].back,adjLists[indexForName(e.name)].back);
 			} else {
-				if (v!=0 || !connectors.contains(adjLists[v].name)) connectors.add(adjLists[v].name);
+				if (v!=0 || !connectors.contains(adjLists[v].name) || (adjLists[v].dfsnum==2 && adjLists[v].back==1)) connectors.add(adjLists[v].name);
 			}
 		}
 	}
