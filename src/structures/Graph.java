@@ -16,15 +16,10 @@ public class Graph {
 		String name;
 		String school;
 		ArrayList<Vertex> friends;
-
-		int dfsnum;
-		int back;
 		Vertex(String name, String school) {
 			this.name = name;
 			this.school = school;
 			this.friends = new ArrayList<Vertex>();
-			int dfsnum = 0;
-			int back = 1;
 		}
 	}
 
@@ -37,10 +32,10 @@ public class Graph {
 	 * @throws FileNotFoundException If file is not found
 	 */
 	public Graph(String file) throws FileNotFoundException {
-		Scanner sc = new Scanner(new File(file));//.useDelimiter("\\n"); we'll break the new lines ourselves
+		Scanner sc = new Scanner(new File(file));//.useDelimiter("\\n"); //we'll break the new lines ourselves
 		int num = Integer.parseInt(sc.nextLine());
 		adjLists = new Vertex[num];
-		//sc.nextLine(); empty line. damn you java
+		//sc.nextLine(); //empty line. damn you java
 		System.out.println(adjLists.length + " friends");
 		
 		// read vertices
@@ -83,6 +78,28 @@ public class Graph {
 		}
 	}
 	
+	public void dfs() {
+		boolean[] visited = new boolean[adjLists.length];
+		for (int v=0; v < visited.length; v++) visited[v] = false;
+		for (int v=0; v < visited.length; v++) {
+			if (!visited[v]) {
+				System.out.println("Starting at " + adjLists[v].name);
+				dfs(v, visited);
+			}
+		}
+	}
+	
+	// recursive dfs
+	private void dfs(int v, boolean[] visited) {
+		visited[v] = true;
+		System.out.println("visiting " + adjLists[v].name);
+		for (int e = 0; e < adjLists.length; e++) {
+			if (!visited[e]) {
+				System.out.println(adjLists[v].name + "--" + adjLists[e].name);
+				dfs(e, visited);
+			}
+		}
+	}
 	
 	public int indexForName(String name) {
 		for (int v=0; v < adjLists.length; v++) {
@@ -157,62 +174,6 @@ public class Graph {
 		}
 	}
 	/*
-	 * Shortest Path
-	 */
-	public void shortestPath(String source, String target) {
-		Vertex[] path = new Vertex[adjLists.length];
-		
-		//HashMap<Graph.Vertex, Integer> distances = new HashMap<Graph.Vertex, Integer>();
-		//HashMap<Graph.Vertex, Integer> prev = new HashMap<Graph.Vertex, Integer>();
-		HashMap<Graph.Vertex, Boolean> visited = new HashMap<Graph.Vertex, Boolean>();
-		HashMap<Graph.Vertex, Graph.Vertex> prev = new HashMap<Graph.Vertex, Graph.Vertex>();
-		//PriorityQueue<Graph.Vertex> q = new PriorityQueue<Graph.Vertex>();
-		Queue<Graph.Vertex> q = new LinkedList<Graph.Vertex>();
-		for(int i = 0; i < adjLists.length; i++) {
-			//distances.put(adjLists[i], (int)Float.POSITIVE_INFINITY);
-			visited.put(adjLists[i], false);
-			//prev.put(adjLists[i], -1);
-			//q.add(adjLists[i]);
-		}
-		//distances.put(adjLists[indexForName(source)], 0);
-		visited.put(adjLists[indexForName(source)], true);
-		q.add(adjLists[indexForName(source)]);
-		Vertex v = adjLists[indexForName(source)];
-		while (!q.isEmpty()) {
-			v = q.remove();
-			if (v.equals(adjLists[indexForName(target)])) {
-				break;
-			} else {
-				for (Vertex w : v.friends) {
-					if (visited.get(w) == false) {
-						q.add(w);
-						visited.put(w, true);
-						prev.put(w,v);
-					}
-				}
-			}
-			
-		}
-		if (v.equals(adjLists[indexForName(target)])) {
-			int x = 0;
-			for (Vertex i = adjLists[indexForName(target)]; i!=null; i=prev.get(i)) {
-				path[x]=i;
-				x++;
-			}
-			for (int k = path.length-1; k>=0; k--) {
-				if (path[k]!=null) {
-					System.out.print(path[k].name);
-					if (k!=0) {
-						System.out.print("--");
-					} else {
-						System.out.print("\n");
-					}
-				}
-			}
-		}
-	}
-	
-	/*
 	 * Connected Islands
 	 */
 	
@@ -244,49 +205,58 @@ public class Graph {
 	}
 	
 	/*
-	 * Connectors
+	 * Shortest Path
 	 */
-	public void connectors() {
-		dfs();
-	}
-	
-	public void dfs() {
-		boolean[] visited = new boolean[adjLists.length];
-		for (int v=0; v < visited.length; v++) visited[v] = false;
-		for (int v=0; v < visited.length; v++) {
-			if (!visited[v]) {
-				//System.out.println("Starting at " + adjLists[v].name);
-				dfs(v, visited);
-			}
+	public void shortestPath(String source, String target) {
+		Vertex[] path = new Vertex[adjLists.length];
+
+		//HashMap<Graph.Vertex, Integer> distances = new HashMap<Graph.Vertex, Integer>();
+		//HashMap<Graph.Vertex, Integer> prev = new HashMap<Graph.Vertex, Integer>();
+		HashMap<Graph.Vertex, Boolean> visited = new HashMap<Graph.Vertex, Boolean>();
+		HashMap<Graph.Vertex, Graph.Vertex> prev = new HashMap<Graph.Vertex, Graph.Vertex>();
+		//PriorityQueue<Graph.Vertex> q = new PriorityQueue<Graph.Vertex>();
+		Queue<Graph.Vertex> q = new LinkedList<Graph.Vertex>();
+		for(int i = 0; i < adjLists.length; i++) {
+			//distances.put(adjLists[i], (int)Float.POSITIVE_INFINITY);
+			visited.put(adjLists[i], false);
+			//prev.put(adjLists[i], -1);
+			//q.add(adjLists[i]);
 		}
-		while(!connectors.isEmpty()) {
-			System.out.println(connectors.remove(0)+",");
-		}
-	}
-	
-	// recursive dfs
-	ArrayList<String> connectors = new ArrayList<String>();
-	
-	private void dfs(int v, boolean[] visited) {
-		if (!visited[v]) {
-			adjLists[v].dfsnum++;
-		}
-		visited[v] = true;
-		//System.out.println("visiting " + adjLists[v].name);
-		for (int e = 0; e < adjLists.length; e++) {
-			if (!visited[e]) {
-				//System.out.println(adjLists[v].name + "--" + adjLists[e].name);
-				dfs(e, visited);
-				if (adjLists[v].dfsnum > adjLists[e].back) {
-					adjLists[v].back = Math.min(adjLists[v].back,adjLists[e].back);
-				} else {
-					if (v!=0) connectors.add(adjLists[v].name);
-				}
+		//distances.put(adjLists[indexForName(source)], 0);
+		visited.put(adjLists[indexForName(source)], true);
+		q.add(adjLists[indexForName(source)]);
+		Vertex v = adjLists[indexForName(source)];
+		while (!q.isEmpty()) {
+			v = q.remove();
+			if (v.equals(adjLists[indexForName(target)])) {
+				break;
 			} else {
-				adjLists[v].back = Math.min(adjLists[v].back,adjLists[e].dfsnum);
+				for (Vertex w : v.friends) {
+					if (visited.get(w) == false) {
+						q.add(w);
+						visited.put(w, true);
+						prev.put(w,v);
+					}
+				}
+			}
+
+		}
+		if (v.equals(adjLists[indexForName(target)])) {
+			int x = 0;
+			for (Vertex i = adjLists[indexForName(target)]; i!=null; i=prev.get(i)) {
+				path[x]=i;
+				x++;
+			}
+			for (int k = path.length-1; k>=0; k--) {
+				if (path[k]!=null) {
+					System.out.print(path[k].name);
+					if (k!=0) {
+						System.out.print("--");
+					} else {
+						System.out.print("\n");
+					}
+				}
 			}
 		}
 	}
-	
-	
 }

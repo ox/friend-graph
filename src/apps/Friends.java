@@ -44,7 +44,7 @@ public class Friends {
 					break;					
 				case 'c':
 					System.out.println("Connectors");
-					graph.connectors();
+					graph.dfs();
 					break;
 				case 'd':
 					graph.dfs();
