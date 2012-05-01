@@ -5,7 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Graph {
@@ -172,6 +174,62 @@ public class Graph {
 		}
 	}
 	/*
+	 * Shortest Path
+	 */
+	public void shortestPath(String source, String target) {
+		Vertex[] path = new Vertex[adjLists.length];
+		
+		//HashMap<Graph.Vertex, Integer> distances = new HashMap<Graph.Vertex, Integer>();
+		//HashMap<Graph.Vertex, Integer> prev = new HashMap<Graph.Vertex, Integer>();
+		HashMap<Graph.Vertex, Boolean> visited = new HashMap<Graph.Vertex, Boolean>();
+		HashMap<Graph.Vertex, Graph.Vertex> prev = new HashMap<Graph.Vertex, Graph.Vertex>();
+		//PriorityQueue<Graph.Vertex> q = new PriorityQueue<Graph.Vertex>();
+		Queue<Graph.Vertex> q = new LinkedList<Graph.Vertex>();
+		for(int i = 0; i < adjLists.length; i++) {
+			//distances.put(adjLists[i], (int)Float.POSITIVE_INFINITY);
+			visited.put(adjLists[i], false);
+			//prev.put(adjLists[i], -1);
+			//q.add(adjLists[i]);
+		}
+		//distances.put(adjLists[indexForName(source)], 0);
+		visited.put(adjLists[indexForName(source)], true);
+		q.add(adjLists[indexForName(source)]);
+		Vertex v = adjLists[indexForName(source)];
+		while (!q.isEmpty()) {
+			v = q.remove();
+			if (v.equals(adjLists[indexForName(target)])) {
+				break;
+			} else {
+				for (Vertex w : v.friends) {
+					if (visited.get(w) == false) {
+						q.add(w);
+						visited.put(w, true);
+						prev.put(w,v);
+					}
+				}
+			}
+			
+		}
+		if (v.equals(adjLists[indexForName(target)])) {
+			int x = 0;
+			for (Vertex i = adjLists[indexForName(target)]; i!=null; i=prev.get(i)) {
+				path[x]=i;
+				x++;
+			}
+			for (int k = path.length-1; k>=0; k--) {
+				if (path[k]!=null) {
+					System.out.print(path[k].name);
+					if (k!=0) {
+						System.out.print("--");
+					} else {
+						System.out.print("\n");
+					}
+				}
+			}
+		}
+	}
+	
+	/*
 	 * Connected Islands
 	 */
 	
@@ -201,23 +259,11 @@ public class Graph {
 			}
 		}
 	}
+	
 	/*
-	 * Shortest Path
+	 * Connectors
 	 */
-	public void shortestPath(String source, String target) {
-		Vertex[] path = new Vertex[adjLists.length];
+	public void connectors() {
 		
-		HashMap<Graph.Vertex, Integer> distances = new HashMap<Graph.Vertex, Integer>();
-		HashMap<Graph.Vertex, Integer> prev = new HashMap<Graph.Vertex, Integer>();
-		PriorityQueue<Graph.Vertex> q = new PriorityQueue<Graph.Vertex>();
-		for(int i = 0; i < adjLists.length; i++) {
-			distances.put(adjLists[i], (int)Float.POSITIVE_INFINITY);
-			prev.put(adjLists[i], -1);
-			q.add(adjLists[i]);
-		}
-		
-		distances.put(adjLists[indexForName(source)], 0);
-		
-			
 	}
 }
