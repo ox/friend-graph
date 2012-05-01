@@ -46,9 +46,6 @@ public class Friends {
 					System.out.println("Connectors");
 					graph.dfs();
 					break;
-				case 'd':
-					graph.dfs();
-					break;
 			}
 		}
 	}

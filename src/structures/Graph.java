@@ -16,10 +16,14 @@ public class Graph {
 		String name;
 		String school;
 		ArrayList<Vertex> friends;
+		int dfsnum;
+		int back;
 		Vertex(String name, String school) {
 			this.name = name;
 			this.school = school;
 			this.friends = new ArrayList<Vertex>();
+			this.dfsnum = 0;
+			this.back = 0;
 		}
 	}
 
@@ -80,23 +84,37 @@ public class Graph {
 	
 	public void dfs() {
 		boolean[] visited = new boolean[adjLists.length];
+		boolean[] fwd = new boolean[adjLists.length];
 		for (int v=0; v < visited.length; v++) visited[v] = false;
+		for (int v=0; v < fwd.length; v++) fwd[v] = true;
 		for (int v=0; v < visited.length; v++) {
 			if (!visited[v]) {
 				System.out.println("Starting at " + adjLists[v].name);
-				dfs(v, visited);
+				dfs(v, visited, fwd);
 			}
 		}
+		System.out.println(connectors);
 	}
-	
+	ArrayList<String> connectors = new ArrayList<String>();
 	// recursive dfs
-	private void dfs(int v, boolean[] visited) {
+	private void dfs(int v, boolean[] visited, boolean[] fwd) {
 		visited[v] = true;
+		adjLists[v].dfsnum++;
+		adjLists[v].back++;
 		System.out.println("visiting " + adjLists[v].name);
-		for (int e = 0; e < adjLists.length; e++) {
-			if (!visited[e]) {
-				System.out.println(adjLists[v].name + "--" + adjLists[e].name);
-				dfs(e, visited);
+		for (Vertex e : adjLists[v].friends) {
+			if (!visited[indexForName(e.name)]) {
+				//System.out.println(adjLists[v].name + "--" + adjLists[e].name);
+				fwd[indexForName(e.name)] = true;
+				dfs(indexForName(e.name), visited, fwd);
+			} else {
+				fwd[indexForName(e.name)] = false; //back
+				adjLists[v].back = Math.min(adjLists[v].back,adjLists[indexForName(e.name)].dfsnum);
+			}
+			if (adjLists[v].dfsnum > adjLists[indexForName(e.name)].back) {
+				adjLists[v].back = Math.min(adjLists[v].back,adjLists[indexForName(e.name)].back);
+			} else {
+				if (v!=0 || !connectors.contains(adjLists[v].name)) connectors.add(adjLists[v].name);
 			}
 		}
 	}
